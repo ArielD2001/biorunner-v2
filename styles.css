@@ -1232,14 +1232,12 @@ body {
 #mobile-controls {
   display: none;
   /* Oculto por defecto en desktop */
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  padding: 0 20px;
+  width: 100%;
+  padding: 10px 20px 25px 20px;
   justify-content: space-between;
   align-items: flex-end;
   z-index: 50;
+  flex-shrink: 0;
 }
 
 @media (max-width: 800px),
@@ -1249,14 +1247,14 @@ body {
   }
 
   #screen-game {
-    padding-bottom: 90px;
+    padding-bottom: 0;
     align-items: stretch;
   }
 
   #game-canvas {
     width: 100%;
-    height: calc(100vh - 150px);
-    max-height: none;
+    flex: 1;
+    min-height: 0;
     object-fit: fill;
   }
 }
