@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BioRunner – Universidad del Sinú</title>
+  <meta name="description" content="BioRunner: videojuego educativo tipo plataforma sobre células del cuerpo humano. Universidad del Sinú." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       PANTALLA DE INICIO
+  ═══════════════════════════════════════════ -->
+  <div id="screen-start" class="screen active">
+    <div class="start-content">
+
+      <div class="uni-header">
+        <img src="assets/images/logo.png" alt="Logo Universidad del Sinú" class="uni-logo-img" />
+        <div class="uni-name-text">
+          <strong>Universidad del Sinú</strong>
+          <span>Elías Bechara Zainúm</span>
+        </div>
+      </div>
+
+      <h1 class="game-title">BioRunner</h1>
+      <p class="game-subtitle">Aprende con cada salto</p>
+
+      <div class="cell-icons">
+        <span class="cell-icon" style="color:#e53935">🔴</span>
+        <span class="cell-icon" style="color:#42a5f5">🦠</span>
+        <span class="cell-icon" style="color:#66bb6a">⚡</span>
+        <span class="cell-icon" style="color:#ff7043">🧫</span>
+      </div>
+
+      <p class="press-start">PRESS START</p>
+      <button class="btn-pixel btn-red" id="btn-start">▶ INICIAR</button>
+      <button id="btn-info-project" class="btn-info-round">?</button>
+      <p class="hint-text">← → Mover &nbsp;|&nbsp; ↑ / Space Saltar &nbsp;|&nbsp; ↓ Agachar &nbsp;|&nbsp; ESC Pausa</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MODAL INFORMACIÓN PROYECTO
+  ═══════════════════════════════════════════ -->
+  <div id="project-info-modal" class="modal-overlay hidden">
+    <div class="modal-box" style="text-align: left;">
+      <div class="modal-header">
+        <h3 class="results-title" style="margin:0; font-size:16px;">Información del Proyecto</h3>
+      </div>
+      <div class="modal-divider"></div>
+      <div class="modal-body" style="font-family: var(--sans);">
+        <p class="info-text"><strong>Proyecto:</strong> Escuela de Odontología 1<br><strong>Grupo:</strong> Músculo Liso</p>
+        <p class="info-text" style="margin-top:10px;"><strong>Integrantes:</strong></p>
+        <ul class="info-list" style="padding-left:20px;">
+          <li>Laura Manco Julio</li>
+          <li>Gina Zuluaga</li>
+          <li>Danny Beltran</li>
+          <li>Marianela Galan</li>
+          <li>Carlos Benitez</li>
+          <li>Gabriela Pereira</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-pixel btn-modal" id="btn-close-project-info">✓ Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PANTALLA DE SELECCIÓN
+  ═══════════════════════════════════════════ -->
+  <div id="screen-select" class="screen">
+    <div class="select-content">
+      <h2 class="section-title">¡Elige tu Héroe!</h2>
+
+      <label class="input-label" for="player-name">Nombre del Estudiante</label>
+      <input type="text" id="player-name" class="pixel-input" placeholder="Ingresa tu nombre..." maxlength="16" />
+
+      <div class="character-grid">
+        <div class="char-card selected" data-char="0" id="char-0">
+          <div class="char-preview" id="char-preview-0"></div>
+          <p>Dr. Axel</p>
+          <span class="char-desc">Guardián Celular</span>
+        </div>
+        <div class="char-card" data-char="1" id="char-1">
+          <div class="char-preview" id="char-preview-1"></div>
+          <p>Bio Nova</p>
+          <span class="char-desc">Especialista en ADN</span>
+        </div>
+      </div>
+
+      <button class="btn-pixel btn-blue" id="btn-continue">▶ CONTINUAR</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PANTALLA DE JUEGO
+  ═══════════════════════════════════════════ -->
+  <div id="screen-game" class="screen">
+    <div id="hud">
+      <!-- Izquierda: logo + nombre + vidas -->
+      <div class="hud-left">
+        <img src="assets/images/logo.png" alt="UdS" class="hud-logo" />
+        <div>
+          <div id="hud-name-row">
+            <span id="hud-name">PLAYER</span>
+          </div>
+          <div id="hud-lives">❤️❤️❤️</div>
+        </div>
+      </div>
+
+      <!-- Centro: puntuación -->
+      <div class="hud-center">
+        <span class="hud-label">PUNTUACIÓN</span>
+        <span id="hud-score">000000</span>
+        <span id="hud-level-name" class="level-badge lv1">Nivel 1 – Sangre</span>
+      </div>
+
+      <!-- Derecha: teclas -->
+      <div class="hud-right" style="text-align:right">
+        <span style="font-size:10px;opacity:0.4;font-family:var(--sans)">ESC = Pausa</span>
+      </div>
+    </div>
+
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Controles táctiles móviles -->
+    <div id="mobile-controls">
+      <div class="touch-group">
+        <button class="touch-btn" id="btn-left">◀</button>
+        <button class="touch-btn" id="btn-right">▶</button>
+      </div>
+      <!-- Pausa en el centro o al costado -->
+      <button class="touch-btn" id="btn-pause-mobile" style="font-size:12px;">⏸</button>
+      <div class="touch-group">
+        <button class="touch-btn" id="btn-jump">▲</button>
+        <button class="touch-btn" id="btn-crouch">▼</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MODAL EDUCATIVO
+  ═══════════════════════════════════════════ -->
+  <div id="edu-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon-wrap">
+          <span id="modal-icon">🦠</span>
+        </div>
+        <div class="modal-text-wrap">
+          <h3 id="modal-title">Nombre de la Célula</h3>
+          <span class="modal-type-badge bad" id="modal-badge">⚠️ Agente Patógeno</span>
+        </div>
+      </div>
+
+      <div class="modal-divider"></div>
+
+      <div class="modal-body">
+        <p id="modal-description">Descripción educativa aquí.</p>
+      </div>
+
+      <div class="modal-fact-box">
+        <strong>🔬 Dato Clave: </strong>
+        <span id="modal-fact">Información adicional.</span>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-pixel btn-modal" id="btn-close-modal">✓ Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAUSA
+  ═══════════════════════════════════════════ -->
+  <div id="screen-pause" class="screen">
+    <div class="pause-content">
+      <h2>⏸ PAUSA</h2>
+      <button class="btn-pixel btn-green"  id="btn-resume">▶ Reanudar</button>
+      <button class="btn-pixel btn-red"    id="btn-quit">⏹ Salir al Inicio</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       GAME OVER
+  ═══════════════════════════════════════════ -->
+  <div id="screen-gameover" class="screen">
+    <div class="gameover-content-container">
+      
+      <!-- Panel Izquierdo: Resultados -->
+      <div class="gameover-content go-panel">
+        <h2 class="gameover-title">GAME OVER</h2>
+        <p class="gameover-sub">Las células patógenas te han derrotado...</p>
+        <div class="gameover-score-box">
+          <p>Puntuación Final</p>
+          <span id="go-score">000000</span>
+        </div>
+
+        <!-- Sumario de Resultados Premium -->
+        <div id="go-results-summary" class="results-summary">
+          <h3 class="results-title">Resumen de Desempeño</h3>
+          <div id="go-level-reached" class="result-item"><span>Nivel Alcanzado:</span> <strong>1</strong></div>
+          <div id="go-quiz-results" class="quiz-results-list">
+            <!-- Dinámico: Quiz 1: 5/5, etc. -->
+          </div>
+          <div class="result-grade">
+            <span>Calificación:</span>
+            <strong id="go-final-grade">--</strong>
+          </div>
+        </div>
+
+        <button class="btn-pixel btn-green" id="btn-restart">↺ Volver a Intentar</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       QUIZ
+  ═══════════════════════════════════════════ -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-content">
+      <div class="quiz-title-row">
+        <img src="assets/images/logo.png" alt="UdS" class="quiz-uni-logo" />
+        <h2 class="section-title">Evaluación Final</h2>
+      </div>
+
+      <div class="quiz-meta">
+        <span id="quiz-progress">Pregunta 1 / 5</span>
+        <span id="quiz-pts">Pts: 0</span>
+      </div>
+
+      <div class="quiz-question-box">
+        <p id="quiz-question">¿Pregunta?</p>
+      </div>
+
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-feedback hidden" id="quiz-feedback"></div>
+      <button class="btn-pixel btn-blue hidden" id="btn-next-question" style="margin-top:20px;">Siguiente Pregunta</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       VICTORIA / RESULTADOS FINALES
+  ═══════════════════════════════════════════ -->
+  <div id="screen-win" class="screen">
+    <div class="win-content">
+      <h2 class="win-title">🏆 ¡Misión Completada!</h2>
+      <div class="win-stats">
+        <div class="stat-row"><span>Estudiante</span>    <span id="win-name">-</span></div>
+        <div class="stat-row"><span>Puntos de Juego</span><span id="win-game-score">0</span></div>
+        <div class="stat-row"><span>Quiz Biología</span> <span id="win-quiz-score">0 / 5</span></div>
+        <div class="stat-row highlight"><span>TOTAL</span><span id="win-total">0</span></div>
+      </div>
+      <div class="win-emoji" id="win-emoji">🎉</div>
+      <button class="btn-pixel btn-green" id="btn-play-again">↺ Jugar de Nuevo</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SCRIPTS (en orden de dependencias)
+  ═══════════════════════════════════════════ -->
+  <script src="js/data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/level.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/enemies.js"></script>
+  <script src="js/objects.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/game.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
