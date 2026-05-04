@@ -152,4 +152,70 @@ class UI {
       quizCorrect >= quizTotal * 0.8 ? '🏆' : quizCorrect >= 0.5 ? '🎉' : '😅';
     this.showScreen('win');
   }
+
+  // ── CINEMÁTICA FINAL (OUTRO) ──────────────────────────────────────────────
+  playEpicOutro(onComplete) {
+    // Esconder pantalla de quiz para revelar la animación base
+    this.screens.quiz.classList.remove('active');
+    
+    const fx = document.getElementById('fx-canvas');
+    if (!fx) { onComplete(); return; }
+    
+    fx.classList.add('active');
+    fx.width = window.innerWidth;
+    fx.height = window.innerHeight;
+    const ctx = fx.getContext('2d');
+    
+    let frame = 0;
+    const duration = 220; // ~3.5 s con 60fps
+    
+    // Partículas doradas, rosas y blancas que explotan desde el centro (ADN / Neuronal burst)
+    const particles = Array.from({length: 200}, () => ({
+      x: fx.width / 2, 
+      y: fx.height / 2,
+      vx: (Math.random() - 0.5) * 35,
+      vy: (Math.random() - 0.5) * 35,
+      color: `hsl(${Math.random() * 50 + 320}, 100%, 65%)`, 
+      size: Math.random() * 6 + 3
+    }));
+
+    if (typeof Audio !== 'undefined') Audio.playPowerUp();
+
+    const loop = () => {
+      frame++;
+      
+      // Fondo negro que se desvanece de a poco
+      ctx.fillStyle = `rgba(0,0,0,${Math.min(0.04 + frame/1500, 0.35)})`;
+      ctx.fillRect(0, 0, fx.width, fx.height);
+      
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx *= 0.96; // Fricción radial
+        p.vy *= 0.96;
+        p.vy += 0.05; // Gravedad leve
+        
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        
+        // Conexiones de red entre partículas
+        ctx.strokeStyle = p.color + '33';
+        ctx.beginPath();
+        ctx.moveTo(fx.width/2, fx.height/2);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+      });
+
+      if (frame < duration) {
+        requestAnimationFrame(loop);
+      } else {
+        fx.classList.remove('active');
+        onComplete();
+      }
+    };
+    
+    requestAnimationFrame(loop);
+  }
 }

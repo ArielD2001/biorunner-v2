@@ -301,9 +301,11 @@ class Game {
 
       const isLastLevel = this.levelIndex >= LEVELS_DATA.length - 1;
       if (isLastLevel) {
-        // Juego completo → pantalla de victoria
-        this.ui.showWin(this.playerName, this.score, correct, total);
-        this.state = STATE.WIN;
+        // Juego completo → Animación épica y pantalla de victoria
+        this.ui.playEpicOutro(() => {
+          this.ui.showWin(this.playerName, this.score, correct, total);
+          this.state = STATE.WIN;
+        });
       } else {
         // Siguiente nivel
         this.score += correct * 500;
