@@ -152,11 +152,13 @@ class AudioEngine {
     this.bgmOsc = this.ctx.createOscillator();
     this.bgmGain = this.ctx.createGain();
     
-    this.bgmOsc.type = 'sine';
-    this.bgmOsc.frequency.setValueAtTime(65, this.ctx.currentTime); // 65 Hz (Sub-bajo profundo)
+    // Cambiar a "triangle" y 110Hz para que se escuche en parlantes de laptop
+    this.bgmOsc.type = 'triangle';
+    this.bgmOsc.frequency.setValueAtTime(110, this.ctx.currentTime); // 110 Hz
     
+    // Volumen un poco más alto
     this.bgmGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-    this.bgmGain.gain.linearRampToValueAtTime(0.06, this.ctx.currentTime + 3); // Fade in lento
+    this.bgmGain.gain.linearRampToValueAtTime(0.15, this.ctx.currentTime + 3); // Fade in lento
 
     this.bgmOsc.connect(this.bgmGain);
     this.bgmGain.connect(this.masterGain);
@@ -167,13 +169,13 @@ class AudioEngine {
     this.lfo = this.ctx.createOscillator();
     this.lfoGain = this.ctx.createGain();
     
-    this.lfo.type = 'triangle';
-    this.lfo.frequency.value = 0.4; // 0.4 Hz, muy lento
+    this.lfo.type = 'sine';
+    this.lfo.frequency.value = 0.6; // 0.6 Hz, más notorio
     
     this.lfo.connect(this.lfoGain);
     this.lfoGain.connect(this.bgmGain.gain);
     
-    this.lfoGain.gain.value = 0.04; // Monto de modulación
+    this.lfoGain.gain.value = 0.08; // Monto de modulación más fuerte
     this.lfo.start();
   }
 
