@@ -212,19 +212,29 @@ class Game {
   }
 
   // ── Pausas ────────────────────────────────────────────────────────────────
-  _pause()  { if (this.state === STATE.PLAYING) this.state = STATE.PAUSED; }
-  _resume() { if (this.state === STATE.PAUSED)  this.state = STATE.PLAYING; }
+  _pause()  { 
+    if (this.state === STATE.PLAYING) {
+      this.state = STATE.PAUSED; 
+      if (typeof Audio !== 'undefined') Audio.stopAmbientSound();
+    }
+  }
+  _resume() { 
+    if (this.state === STATE.PAUSED) {
+      this.state = STATE.PLAYING; 
+      if (typeof Audio !== 'undefined') Audio.startAmbientSound();
+    }
+  }
 
   togglePause() {
     if (this.state === STATE.PLAYING) {
-      this.state = STATE.PAUSED;
+      this._pause();
       this.ui.screens.game.classList.remove('active');
       this.ui.screens.pause.classList.add('active');
     }
   }
 
   resumeFromPauseScreen() {
-    this.state = STATE.PLAYING;
+    this._resume();
     this.ui.screens.pause.classList.remove('active');
     this.ui.screens.game.classList.add('active');
   }
@@ -268,12 +278,15 @@ class Game {
     this.ui.setLevelName(LEVELS_DATA[idx].name, LEVELS_DATA[idx].region);
     this.ui.updateScore(this.score);
     this.ui.updateLives(this.player.lives, this.player.maxLives);
+    
+    if (typeof Audio !== 'undefined') Audio.startAmbientSound();
   }
 
   restart() {
     this.state = STATE.START;
     this.ui.closeModal();
     this.ui.showScreen('start');
+    if (typeof Audio !== 'undefined') Audio.stopAmbientSound();
   }
 
   retryCurrentLevel() {
@@ -287,12 +300,14 @@ class Game {
   // ── Game Over ─────────────────────────────────────────────────────────────
   _triggerGameOver() {
     this.state = STATE.GAMEOVER;
+    if (typeof Audio !== 'undefined') Audio.stopAmbientSound();
     setTimeout(() => this.ui.showGameOver(this.score, this.levelIndex, this.quizResults), 400);
   }
 
   // ── Quiz ──────────────────────────────────────────────────────────────────
   _triggerQuiz() {
-    this._pause();
+    if (typeof Audio !== 'undefined') Audio.stopAmbientSound();
+    this.state = STATE.PAUSED; // Similar to _pause
     this.ui.showScreen('quiz');
 
     this.quiz = new Quiz(this.levelIndex, (correct, total) => {
