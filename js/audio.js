@@ -146,58 +146,54 @@ class AudioEngine {
   }
 
   startAmbientSound() {
-    if (!this.initialized || this.isMuted || this.bgmOsc) return;
+    if (!this.initialized || this.isMuted || this.bgmInterval) return;
 
-    // Oscilador de onda senoidal de muy baja frecuencia (hum de fondo)
-    this.bgmOsc = this.ctx.createOscillator();
-    this.bgmGain = this.ctx.createGain();
+    // Frecuencias para una melodía estilo 8-bits retro (exploración misteriosa/arcade)
+    const melody = [
+      440.00, 523.25, 659.25, 783.99, // Arpegio Am
+      440.00, 523.25, 659.25, 783.99,
+      392.00, 493.88, 587.33, 783.99, // Arpegio G
+      392.00, 493.88, 587.33, 783.99,
+      349.23, 440.00, 523.25, 698.46, // Arpegio F
+      349.23, 440.00, 523.25, 698.46,
+      329.63, 415.30, 493.88, 659.25, // Arpegio E
+      329.63, 415.30, 493.88, 659.25
+    ];
     
-    // Cambiar a "triangle" y 110Hz para que se escuche en parlantes de laptop
-    this.bgmOsc.type = 'triangle';
-    this.bgmOsc.frequency.setValueAtTime(110, this.ctx.currentTime); // 110 Hz
-    
-    // Volumen un poco más alto
-    this.bgmGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-    this.bgmGain.gain.linearRampToValueAtTime(0.15, this.ctx.currentTime + 3); // Fade in lento
+    let noteIndex = 0;
+    const tempoMs = 120; // Velocidad de la melodía (8 bits ágil)
 
-    this.bgmOsc.connect(this.bgmGain);
-    this.bgmGain.connect(this.masterGain);
-    
-    this.bgmOsc.start();
+    this.bgmInterval = setInterval(() => {
+      // Evitar que suene si la pestaña está inactiva y el contexto se duerme
+      if(this.ctx.state === 'suspended') return;
 
-    // Crear un LFO (Low frequency oscillator) para simular "pulso/respiración" celular
-    this.lfo = this.ctx.createOscillator();
-    this.lfoGain = this.ctx.createGain();
-    
-    this.lfo.type = 'sine';
-    this.lfo.frequency.value = 0.6; // 0.6 Hz, más notorio
-    
-    this.lfo.connect(this.lfoGain);
-    this.lfoGain.connect(this.bgmGain.gain);
-    
-    this.lfoGain.gain.value = 0.08; // Monto de modulación más fuerte
-    this.lfo.start();
+      const freq = melody[noteIndex] * 0.5; // Bajamos una octava para que suene cálido
+      const t = this.ctx.currentTime;
+      
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      
+      osc.type = 'square'; // Tipo cuadrado para ese sabor real a Nintendo / Arcade antiguo
+      osc.frequency.setValueAtTime(freq, t);
+      
+      // Volumen bajo para que no moleste durante el juego
+      gain.gain.setValueAtTime(0.04, t); 
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15); // La nota dura casi nada ('Pluck')
+      
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+      
+      osc.start(t);
+      osc.stop(t + 0.15);
+
+      noteIndex = (noteIndex + 1) % melody.length;
+    }, tempoMs);
   }
 
   stopAmbientSound() {
-    if (this.bgmOsc) {
-      // Fade out
-      const t = this.ctx.currentTime;
-      this.bgmGain.gain.cancelScheduledValues(t);
-      this.bgmGain.gain.setValueAtTime(this.bgmGain.gain.value, t);
-      this.bgmGain.gain.linearRampToValueAtTime(0.001, t + 1);
-      
-      const oldBgm = this.bgmOsc;
-      const oldLfo = this.lfo;
-      this.bgmOsc = null;
-      this.lfo = null;
-      
-      setTimeout(() => {
-        try {
-          oldBgm.stop();
-          oldLfo.stop();
-        } catch(e) {}
-      }, 1000);
+    if (this.bgmInterval) {
+      clearInterval(this.bgmInterval);
+      this.bgmInterval = null;
     }
   }
 }
