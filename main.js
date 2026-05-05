@@ -59,14 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') document.getElementById('btn-continue').click();
   });
 
-  // ── INFORMACIÓN DEL PROYECTO ──────────────────────────────────────────────
+  // ── INFORMACIÓN DEL PROYECTO Y TEORÍA ─────────────────────────────────────
   const infoModal = document.getElementById('project-info-modal');
-  document.getElementById('btn-info-project').addEventListener('click', () => {
-    infoModal.classList.remove('hidden');
-  });
-  document.getElementById('btn-close-project-info').addEventListener('click', () => {
-    infoModal.classList.add('hidden');
-  });
+  const theoryModal = document.getElementById('theory-modal');
+  const tutorialModal = document.getElementById('tutorial-modal');
+
+  document.getElementById('btn-info-project').addEventListener('click', () => infoModal.classList.remove('hidden'));
+  document.getElementById('btn-close-project-info').addEventListener('click', () => infoModal.classList.add('hidden'));
+
+  document.getElementById('btn-theory').addEventListener('click', () => theoryModal.classList.remove('hidden'));
+  document.getElementById('btn-close-theory').addEventListener('click', () => theoryModal.classList.add('hidden'));
+
+  document.getElementById('btn-tutorial').addEventListener('click', () => tutorialModal.classList.remove('hidden'));
+  document.getElementById('btn-close-tutorial').addEventListener('click', () => tutorialModal.classList.add('hidden'));
 
   // ── SONIDO GLOBAL DE INTERFAZ ─────────────────────────────────────────────
   document.body.addEventListener('click', (e) => {

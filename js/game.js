@@ -318,7 +318,7 @@ class Game {
       if (isLastLevel) {
         // Juego completo → Animación épica y pantalla de victoria
         this.ui.playEpicOutro(() => {
-          this.ui.showWin(this.playerName, this.score, correct, total);
+          this.ui.showWin(this.playerName, this.score, this.quizResults);
           this.state = STATE.WIN;
         });
       } else {

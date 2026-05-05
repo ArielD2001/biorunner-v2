@@ -1313,3 +1313,9 @@ body {
   background: rgba(255, 255, 255, 0.4);
   transform: scale(0.92);
 }
+
+/* ──────────────────────────────────────────────────
+   Nuevos Personajes (Preview)
+────────────────────────────────────────────────── */
+.char-card[data-char="2"] .char-preview { background-color: #ff8a80; }
+.char-card[data-char="3"] .char-preview { background-color: #ffcc80; }

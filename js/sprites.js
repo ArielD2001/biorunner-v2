@@ -431,6 +431,86 @@ const Sprites = {
 
     const offsetY = crouching ? 12 : 0;
 
+    // ── PERSONAJES ESPECIALES (2 = Cerebro, 3 = Estómago) ──
+    if (charIndex === 2) {
+      // CEREBRÓN: Cuerpo es una masa cerebral rosa
+      ctx.fillStyle = 'rgba(0,0,0,0.18)'; 
+      ctx.beginPath(); ctx.ellipse(18, 42 + offsetY, 15, 4, 0, 0, Math.PI * 2); ctx.fill();
+
+      ctx.fillStyle = '#b71c1c';
+      ctx.beginPath(); ctx.roundRect(6, 34 + offsetY, 10, 8, 3); ctx.fill();
+      ctx.beginPath(); ctx.roundRect(22, 34 + offsetY, 10, 8, 3); ctx.fill();
+
+      const armOff = frame === 1 ? 2 : 0;
+      ctx.fillStyle = '#ff8a80';
+      ctx.fillRect(-2, 14 + armOff + offsetY, 6, 12);
+      ctx.fillRect(34, 14 + armOff + offsetY, 6, 12);
+      
+      ctx.beginPath();
+      ctx.arc(10, 15 + offsetY, 10, 0, Math.PI*2);
+      ctx.arc(26, 15 + offsetY, 10, 0, Math.PI*2);
+      ctx.arc(18, 8 + offsetY, 12, 0, Math.PI*2);
+      ctx.arc(18, 22 + offsetY, 12, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.strokeStyle = '#d50000';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(18, 0 + offsetY); ctx.lineTo(18, 30 + offsetY);
+      ctx.moveTo(8, 15 + offsetY); ctx.quadraticCurveTo(14, 8 + offsetY, 18, 15 + offsetY);
+      ctx.moveTo(28, 15 + offsetY); ctx.quadraticCurveTo(22, 8 + offsetY, 18, 15 + offsetY);
+      ctx.stroke();
+
+      ctx.fillStyle = 'white';
+      ctx.beginPath(); ctx.arc(14, 20 + offsetY, 5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(24, 20 + offsetY, 5, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'black';
+      ctx.beginPath(); ctx.arc(15, 20 + offsetY, 2, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(25, 20 + offsetY, 2, 0, Math.PI*2); ctx.fill();
+      
+      ctx.restore();
+      return;
+    } 
+    
+    if (charIndex === 3) {
+      // GASTRO: Estómago anaranjado
+      ctx.fillStyle = 'rgba(0,0,0,0.18)'; 
+      ctx.beginPath(); ctx.ellipse(18, 42 + offsetY, 15, 4, 0, 0, Math.PI * 2); ctx.fill();
+
+      ctx.fillStyle = '#bf360c';
+      ctx.beginPath(); ctx.roundRect(8, 34 + offsetY, 8, 8, 3); ctx.fill();
+      ctx.beginPath(); ctx.roundRect(22, 34 + offsetY, 8, 8, 3); ctx.fill();
+
+      const armOff = frame === 1 ? 2 : 0;
+      ctx.fillStyle = '#ff7043';
+      ctx.fillRect(0, 18 + armOff + offsetY, 5, 10);
+      ctx.fillRect(33, 18 + armOff + offsetY, 5, 10);
+
+      ctx.fillStyle = '#ffcc80'; 
+      ctx.beginPath();
+      ctx.ellipse(19, 20 + offsetY, 14, 18, 0, 0, Math.PI*2);
+      ctx.fill();
+      
+      ctx.strokeStyle = '#ff7043';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.fillStyle = 'rgba(100,255,100,0.4)';
+      ctx.beginPath();
+      ctx.arc(19, 28 + offsetY, 10, 0, Math.PI, false);
+      ctx.fill();
+
+      ctx.fillStyle = 'black';
+      ctx.fillRect(13, 16 + offsetY, 3, 4);
+      ctx.fillRect(23, 16 + offsetY, 3, 4);
+      ctx.fillStyle = '#d84315';
+      ctx.fillRect(16, 24 + offsetY, 6, 2);
+
+      ctx.restore();
+      return;
+    }
+
+    // ── PERSONAJES DEFAULT (0 = Axel, 1 = Nova) ──
     // Color de piel
     const skinColor  = charIndex === 0 ? '#f5c5a3' : '#e8a87c';
     const hairColor  = charIndex === 0 ? '#1a0f00' : '#4a0e0e';

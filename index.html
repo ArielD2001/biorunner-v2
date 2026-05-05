@@ -26,7 +26,12 @@
       </div>
 
       <h1 class="game-title">BioRunner</h1>
-      <p class="game-subtitle">Aprende con cada salto</p>
+      <p class="game-subtitle">Aprende con cada salto - Músculo Liso</p>
+
+      <div style="display:flex; gap:12px; margin-top:5px; margin-bottom:5px;">
+        <button class="btn-pixel btn-blue" id="btn-theory" style="font-size:10px; padding: 10px 14px;">📚 TEORÍA</button>
+        <button class="btn-pixel btn-green" id="btn-tutorial" style="font-size:10px; padding: 10px 14px;">🎮 CÓMO JUGAR</button>
+      </div>
 
       <div class="cell-icons">
         <span class="cell-icon" style="color:#e53935">🔴</span>
@@ -90,9 +95,78 @@
           <p>Bio Nova</p>
           <span class="char-desc">Especialista en ADN</span>
         </div>
+        <div class="char-card" data-char="2" id="char-2">
+          <div class="char-preview" id="char-preview-2"></div>
+          <p>Cerebrón</p>
+          <span class="char-desc">El Coordinador</span>
+        </div>
+        <div class="char-card" data-char="3" id="char-3">
+          <div class="char-preview" id="char-preview-3"></div>
+          <p>Gastro</p>
+          <span class="char-desc">Motor Gástrico</span>
+        </div>
       </div>
 
       <button class="btn-pixel btn-blue" id="btn-continue">▶ CONTINUAR</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MODAL TEORÍA (MÚSCULO LISO)
+  ═══════════════════════════════════════════ -->
+  <div id="theory-modal" class="modal-overlay hidden">
+    <div class="modal-box" style="text-align: left; max-height:85vh; overflow-y:auto;">
+      <div class="modal-header">
+        <h3 class="results-title" style="margin:0; font-size:18px; color:var(--gold);">Teoría: Músculo Liso</h3>
+      </div>
+      <div class="modal-divider"></div>
+      <div class="modal-body" style="font-family: var(--sans);">
+        <p class="info-text"><strong>¿Qué es el músculo liso?</strong><br>
+        Es un tipo de tejido muscular involuntario que se encuentra en las paredes de los órganos internos (visceral), como los vasos sanguíneos, el tracto digestivo y el sistema respiratorio. No tiene estrías bajo el microscopio, de ahí su nombre "liso".</p>
+        
+        <p class="info-text" style="margin-top:10px;"><strong>Tipos de músculo liso:</strong></p>
+        <ul class="info-list" style="padding-left:20px; line-height: 1.4; margin-bottom:10px;">
+          <li><strong>Unidad única (Unicelular / Sincitio):</strong> Sus fibras están conectadas por uniones en hendidura (gap junctions) y se contraen como una sola unidad coordinada (ej. pared intestinal).</li>
+          <li><strong>Multiunitario:</strong> Cada fibra actúa de forma independiente y recibe su propia inervación nerviosa, lo que permite contracciones muy finas (ej. el iris del ojo).</li>
+        </ul>
+
+        <p class="info-text" style="margin-top:10px;"><strong>¿Quién lo coordina?</strong><br>
+        Es gobernado por el <strong>Sistema Nervioso Autónomo (SNA)</strong>, funcionando de forma totalmente inconsciente mediante sus dos ramas: Simpática y Parasimpática.</p>
+
+        <p class="info-text" style="margin-top:10px;"><strong>¿Cómo recibe las señales?</strong><br>
+        El músculo responde a estímulos nerviosos liberando neurotransmisores (como acetilcolina y noradrenalina) desde las varicosidades nerviosas. También puede ser activado por <strong>hormonas</strong> (oxitocina, adrenalina), factores químicos locales o incluso directamente por el <strong>estiramiento</strong> mecánico de la pared.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-pixel btn-modal" id="btn-close-theory">✓ Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MODAL CÓMO JUGAR
+  ═══════════════════════════════════════════ -->
+  <div id="tutorial-modal" class="modal-overlay hidden">
+    <div class="modal-box" style="text-align: left;">
+      <div class="modal-header">
+        <h3 class="results-title" style="margin:0; font-size:18px; color:var(--gold);">Cómo Jugar</h3>
+      </div>
+      <div class="modal-divider"></div>
+      <div class="modal-body" style="font-family: var(--sans);">
+        <p class="info-text">Eres un agente biológico explorando el tejido muscular.</p>
+        <ul class="info-list" style="padding-left:20px; margin-top:10px; line-height:1.6;">
+          <li><strong>Controles:</strong> Usa flechas (Izq/Der) para moverte, flecha Arriba o Espacio para saltar. En móvil usa los botones táctiles en pantalla.</li>
+          <li><strong>Objetivo:</strong> Toca las células beneficiosas (doradas, azules) para ganar puntos o poderes.</li>
+          <li><strong>Poderes:</strong><br>
+            - <i>Óxido Nítrico:</i> Te vuelve más rápido (+50%).<br>
+            - <i>Prostaciclina:</i> Otorga un escudo de invulnerabilidad.
+          </li>
+          <li><strong>Peligros:</strong> Evita las células patógenas (rojas con espinas). ¡Chocar te quita una vida!</li>
+          <li><strong>Evaluaciones:</strong> Al final de cada nivel enfrentarás una evaluación de lo que hayas aprendido.</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-pixel btn-modal" id="btn-close-tutorial">✓ Cerrar</button>
+      </div>
     </div>
   </div>
 
@@ -253,8 +327,13 @@
       <div class="win-stats">
         <div class="stat-row"><span>Estudiante</span>    <span id="win-name">-</span></div>
         <div class="stat-row"><span>Puntos de Juego</span><span id="win-game-score">0</span></div>
-        <div class="stat-row"><span>Quiz Biología</span> <span id="win-quiz-score">0 / 5</span></div>
-        <div class="stat-row highlight"><span>TOTAL</span><span id="win-total">0</span></div>
+        
+        <!-- Recolector dinámico de quizzes -->
+        <div style="margin: 10px 0; border-top: 1px dashed rgba(255,255,255,0.2); border-bottom: 1px dashed rgba(255,255,255,0.2); padding: 10px 0;" id="win-all-quizzes">
+           <!-- Dynamic rows -->
+        </div>
+
+        <div class="stat-row highlight"><span>TOTAL GENERAL</span><span id="win-total">0</span></div>
       </div>
       <div class="win-emoji" id="win-emoji">🎉</div>
       <button class="btn-pixel btn-green" id="btn-play-again">↺ Jugar de Nuevo</button>
