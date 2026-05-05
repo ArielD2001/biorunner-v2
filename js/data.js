@@ -31,6 +31,7 @@ const LEVEL1_GOOD = [
     icon: '🟠',
     color: '#f57c00',
     points: 150,
+    powerUp: 'speed-boost',
     description: 'La miosina II del músculo liso forma filamentos gruesos pero de manera dinámica, ensamblándose y desensamblándose según el estado de fosforilación de las cadenas ligeras reguladoras (MLC). Su cabeza hidroliza ATP para generar fuerza sobre los filamentos de actina.',
     fact: 'La miosina del músculo liso puede mantener contracción por largos periodos con muy poco consumo de ATP (el fenómeno "latch"), ideal para órganos como el útero o la vejiga.'
   },
@@ -81,6 +82,7 @@ const LEVEL2_GOOD = [
     icon: '⚪',
     color: '#29b6f6',
     points: 200,
+    powerUp: 'shield',
     description: 'El Ca²⁺ es el segundo mensajero central en la contracción del músculo liso. Puede entrar por canales de la membrana (VOC, receptor-operados) o ser liberado del retículo sarcoplásmico vía IP3 o rianodina. El aumento de Ca²⁺ citosólico de ~100 nM a ~1 µM desencadena la cascada contráctil.',
     fact: 'El calcio se une a la calmodulina en una proporción 4:1 (4 Ca²⁺ por calmodulina), lo que activa la quinasa de cadena ligera de miosina (MLCK) e inicia la contracción.'
   },
@@ -151,6 +153,7 @@ const LEVEL3_GOOD = [
     icon: '💨',
     color: '#26c6da',
     points: 300,
+    powerUp: 'speed-boost',
     description: 'El NO es producido por la eNOS (endotelial NOS) en respuesta a acetilcolina, flujo laminar y otros estímulos. Difunde al músculo liso, activa la guanilato ciclasa soluble elevando GMPc, que activa la PKG. La PKG fosforila canales de K⁺ (hiperpolarización) y la MLCP (desfosforilación de MLC → relajación).',
     fact: 'La nitroglicerina y otros nitratos usan este mecanismo: se metabolizan a NO y producen relajación del músculo liso vascular, aliviando el dolor en angina de pecho.'
   },
@@ -161,6 +164,7 @@ const LEVEL3_GOOD = [
     icon: '🌿',
     color: '#66bb6a',
     points: 250,
+    powerUp: 'shield',
     description: 'La PGI₂ es sintetizada por las células endoteliales a partir del ácido araquidónico vía ciclooxigenasa. Activa receptores IP en el músculo liso vascular, elevando AMPc vía Gs → adenilato ciclasa. El AMPc activa PKA, que fosforila e inhibe la MLCK y activa canales de K⁺ → relajación.',
     fact: 'El balance entre prostaciclina (vasodilatadora, antiagregante) y tromboxano A2 (vasoconstrictor, proagregante) es crítico para la homeostasis vascular. La aspirina a dosis bajas inhibe preferentemente el TXA2 plaquetario, desplazando este equilibrio hacia la prostaciclina.'
   },

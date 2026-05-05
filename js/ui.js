@@ -98,6 +98,23 @@ class UI {
 
   closeModal() { this._closeModal(); }
 
+  // ── Notificación de Power-Up ──────────────────────────────────────────────
+  showPowerUpNotification(cellData) {
+    const msg = document.createElement('div');
+    msg.className = `powerup-notification ${cellData.powerUp}`;
+    
+    const powerUpText = cellData.powerUp === 'speed-boost' 
+      ? '⚡ VELOCIDAD +50%' 
+      : cellData.powerUp === 'shield'
+      ? '🛡️ ESCUDO ACTIVADO'
+      : '✨ PODER ACTIVADO';
+    
+    msg.textContent = powerUpText;
+    document.body.appendChild(msg);
+    
+    setTimeout(() => msg.remove(), 2500);
+  }
+
   // ── Game Over ─────────────────────────────────────────────────────────────
   showGameOver(score, levelIndex, quizResults) {
     document.getElementById('go-score').textContent = String(score).padStart(6, '0');

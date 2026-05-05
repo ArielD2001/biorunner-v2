@@ -155,6 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.scale(0.9, 0.9);
       Sprites.drawPlayer(ctx, 8, 4, charIdx, false, false, 0);
       ctx.restore();
+      
+      // Marcar como cargado
+      previewDiv.classList.add('loaded');
     });
   }, 250); // Pequeño retraso para asegurar que las imágenes base estén listas (si las hay)
 

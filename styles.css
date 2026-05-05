@@ -263,18 +263,21 @@ body {
   }
 }
 
-/* Blink press start */
+/* Glow press start */
 .press-start {
   font-family: var(--pixel);
   font-size: 12px;
   color: var(--gold);
-  animation: blink 1s step-start infinite;
+  animation: glowPulse 2s ease-in-out infinite;
   letter-spacing: 2px;
 }
 
-@keyframes blink {
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(249, 168, 37, 0.5);
+  }
   50% {
-    opacity: 0;
+    text-shadow: 0 0 20px rgba(249, 168, 37, 0.8), 0 0 30px rgba(249, 168, 37, 0.4);
   }
 }
 
@@ -594,10 +597,42 @@ body {
 }
 
 /* ──────────────────────────────────────────────────
-   PAUSA
+   NOTIFICACIONES DE POWER-UP
 ────────────────────────────────────────────────── */
-#screen-pause {
-  background: rgba(0, 0, 0, 0.8);
+.powerup-notification {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 14px;
+  font-family: var(--pixel);
+  z-index: 1000;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.powerup-notification.speed-boost {
+  background: linear-gradient(135deg, #66bb6a, #4caf50cc);
+}
+
+.powerup-notification.shield {
+  background: linear-gradient(135deg, #42a5f5, #2196f3cc);
+}
+
+@keyframes loadingShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
   backdrop-filter: blur(12px);
 }
 
@@ -1013,6 +1048,146 @@ body {
   opacity: 0.6;
 }
 
+/* ──────────────────────────────────────────────────
+   BRAIN INTRO – Nivel 1
+────────────────────────────────────────────────── */
+#brain-intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(38, 198, 218, 0.18), transparent 24%),
+              radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 22%),
+              linear-gradient(135deg, #07091c 0%, #12163f 55%, #0d1030 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+  overflow: hidden;
+  animation: fadeIn 0.4s ease-out;
+}
+
+#brain-intro-overlay::before,
+#brain-intro-overlay::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+#brain-intro-overlay::before {
+  width: 340px;
+  height: 340px;
+  background: rgba(38, 198, 218, 0.18);
+  top: 10%;
+  left: 10%;
+}
+
+#brain-intro-overlay::after {
+  width: 260px;
+  height: 260px;
+  background: rgba(198, 40, 40, 0.14);
+  bottom: 8%;
+  right: 12%;
+}
+
+.brain-intro-content {
+  position: relative;
+  width: min(720px, 92vw);
+  padding: 38px 34px;
+  border-radius: 24px;
+  background: rgba(10, 10, 30, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  animation: slideUp 0.55s ease-out 0.2s both;
+}
+
+.brain-intro-emoji {
+  font-size: 130px;
+  margin-bottom: 18px;
+  animation: brainPulse 1s ease-in-out infinite;
+}
+
+.brain-intro-title {
+  font-family: var(--pixel);
+  font-size: clamp(28px, 5vw, 52px);
+  color: #26c6da;
+  margin: 0 0 18px;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 28px rgba(38, 198, 218, 0.35);
+}
+
+.brain-intro-line {
+  font-family: var(--sans);
+  font-size: clamp(14px, 2.7vw, 18px);
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.7;
+  margin: 10px auto;
+  max-width: 90%;
+  min-height: 34px;
+}
+
+.brain-intro-hint {
+  font-family: var(--pixel);
+  font-size: 11px;
+  color: rgba(198, 40, 40, 0.85);
+  margin-top: 32px;
+  opacity: 0.92;
+}
+
+.brain-intro-footer {
+  margin-top: 26px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.brain-intro-skip-btn {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(198, 40, 40, 0.4);
+  background: rgba(198, 40, 40, 0.1);
+  color: #ff7070;
+  font-size: 11px;
+  font-family: var(--pixel);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.brain-intro-skip-btn:hover {
+  background: rgba(198, 40, 40, 0.2);
+  border-color: rgba(198, 40, 40, 0.6);
+}
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 11px;
+}
+
+@keyframes brainPulse {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(10deg);
+  }
+}
+
+@keyframes glitch {
+  0% { text-shadow: 0 0 20px rgba(38, 198, 218, 0.5); }
+  50% { text-shadow: -2px 2px 0 rgba(38, 198, 218, 0.8), 2px -2px 0 rgba(198, 40, 40, 0.6); }
+  100% { text-shadow: 0 0 20px rgba(38, 198, 218, 0.5); }
+}
+
+@keyframes textGlow {
+  0%, 100% { color: #26c6da; }
+  50% { color: #42a5f5; }
+}
+
 @keyframes borderRotate {
   0% {
     background-position: 0% 50%;
@@ -1024,6 +1199,31 @@ body {
 
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes fadeOutUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50px);
   }
 }
 
@@ -1074,9 +1274,10 @@ body {
 
 .character-grid {
   display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
+  gap: 12px;
+  flex-direction: row;
   justify-content: center;
+  flex-wrap: nowrap;
 }
 
 .char-card {
@@ -1091,7 +1292,9 @@ body {
   transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
   background: var(--glass);
   backdrop-filter: blur(8px);
-  min-width: 130px;
+  flex: 1;
+  min-width: 0; /* Permitir que se comprima */
+  max-width: 130px; /* Evitar estiramiento excesivo que cause pixelado */
 }
 
 .char-card:hover {
@@ -1106,27 +1309,46 @@ body {
 }
 
 .char-preview {
-  width: 68px;
-  height: 84px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
+  width: 78px;
+  height: 96px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.char-preview::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: loadingShimmer 1.5s infinite;
 }
 
 .char-preview canvas {
   display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.char-preview.loaded::before {
+  display: none;
 }
 
 .char-card p {
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   color: #fff;
+  margin: 0;
+  text-align: center;
 }
 
 .char-card .char-desc {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.6);
   text-align: center;
+  font-weight: 500;
 }
 
 /* HUD badges de nivel */

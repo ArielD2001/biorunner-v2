@@ -19,10 +19,11 @@ class Player {
     // --- Física ---
     this.velX      = 0;
     this.velY      = 0;
-    this.speed     = 3.5;          // velocidad horizontal
-    this.jumpForce = -13;          // impulso de salto
-    this.gravity   = 0.55;        // gravedad por frame
-    this.maxFallSpeed = 14;
+    this.baseSpeed = 4.5;         // velocidad horizontal base
+    this.speed     = this.baseSpeed;
+    this.jumpForce = -17;         // impulso de salto
+    this.gravity   = 0.9;         // gravedad por frame
+    this.maxFallSpeed = 16;
 
     // --- Estado ---
     this.onGround  = false;
@@ -58,7 +59,7 @@ class Player {
     const isJump  = keys['ArrowUp']    || keys['w'] || keys['W'] || keys[' '];
     const isCrouch= keys['ArrowDown']  || keys['s'] || keys['S'];
 
-    const currentSpeed = this.speedBoostTimer > 0 ? this.speed * 1.5 : this.speed;
+    const currentSpeed = this.speedBoostTimer > 0 ? this.baseSpeed * 1.5 : this.baseSpeed;
     
     // Movimiento horizontal
     if (isLeft) {
@@ -69,8 +70,8 @@ class Player {
       this.facingLeft = false;
     } else {
       // Fricción
-      this.velX *= 0.7;
-      if (Math.abs(this.velX) < 0.1) this.velX = 0;
+      this.velX *= 0.8;
+      if (Math.abs(this.velX) < 0.15) this.velX = 0;
     }
 
     // Salto
@@ -216,17 +217,20 @@ class Player {
     this.particles = [];
     this.crouching = false;
     this.facingLeft = false;
+    this.speed = this.baseSpeed;
     this.speedBoostTimer = 0;
     this.shieldTimer = 0;
   }
 
   // ── Aplicar Power-Ups ──────────────────────────────────────────────────────
-  applyPowerUp(name) {
-    if (name.toLowerCase().includes('óxido nítrico') || name.toLowerCase().includes('oxido nitrico')) {
-      this.speedBoostTimer = 300; // ~5 sec speed boost
+  applyPowerUp(powerUpType) {
+    if (!powerUpType) return;
+
+    if (powerUpType === 'speed-boost') {
+      this.speedBoostTimer = 300; // ~5 seg a 60 fps
       if (typeof Audio !== 'undefined') Audio.playPowerUp();
-    } else if (name.toLowerCase().includes('prostaciclina')) {
-      this.shieldTimer = 300; // ~5 sec shield
+    } else if (powerUpType === 'shield') {
+      this.shieldTimer = 300; // ~5 seg a 60 fps
       if (typeof Audio !== 'undefined') Audio.playPowerUp();
     }
   }

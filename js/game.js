@@ -44,6 +44,9 @@ class Game {
     // Frame global
     this.frame = 0;
 
+    // Flag para mostrar intro del cerebro solo la primera vez en Nivel 1
+    this.brainIntroShown = false;
+
     // Set de IDs de células cuyo modal ya se mostró (persiste entre niveles)
     this.shownModals = new Set();
 
@@ -134,6 +137,12 @@ class Game {
           this.ui.updateScore(this.score);
           Audio.playCollect();
           Particles.spawn(cell.x + cell.w/2, cell.y + cell.h/2, '#f9a825', 10, 'spark');
+          
+          // Aplicar Power-Up si la célula lo tiene
+          if (cellData.powerUp) {
+            this.player.applyPowerUp(cellData.powerUp);
+            this.ui.showPowerUpNotification(cellData);
+          }
           
           if (showModal) {
             this._pause();
@@ -280,6 +289,16 @@ class Game {
     this.ui.updateLives(this.player.lives, this.player.maxLives);
     
     if (typeof Audio !== 'undefined') Audio.startAmbientSound();
+
+    // ── Mostrar intro del cerebro para Nivel 1 ─────────────────────────────────
+    if (idx === 0 && !this.brainIntroShown) {
+      this.brainIntroShown = true;
+      this.state = STATE.PAUSED;
+      const brainIntro = new BrainIntro(() => {
+        this.state = STATE.PLAYING;
+      });
+      brainIntro.start();
+    }
   }
 
   restart() {
