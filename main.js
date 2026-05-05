@@ -132,4 +132,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ── DIBUJAR PREVIEWS DE PERSONAJES ─────────────────────────────────────────
+  setTimeout(() => {
+    document.querySelectorAll('.char-card').forEach(card => {
+      const charIdx = parseInt(card.getAttribute('data-char'));
+      const previewDiv = card.querySelector('.char-preview');
+      previewDiv.innerHTML = '<canvas width="48" height="48" style="border-radius:8px;"></canvas>';
+      const cvs = previewDiv.querySelector('canvas');
+      const ctx = cvs.getContext('2d');
+      
+      // Fondo propio del personaje
+      let bg = '#111';
+      if(charIdx===0) bg = '#f5c5a3';
+      else if(charIdx===1) bg = '#e8a87c';
+      else if(charIdx===2) bg = '#3b1c2b'; // Fondo oscuro para que resalte el cerebro
+      else if(charIdx===3) bg = '#4a2c1b'; // Fondo para el estomago
+      ctx.fillStyle = bg;
+      ctx.fillRect(0,0,48,48);
+      
+      ctx.save();
+      // Escalar un poquito y centrar para que el sprite quepa perfecto
+      ctx.scale(0.9, 0.9);
+      Sprites.drawPlayer(ctx, 8, 4, charIdx, false, false, 0);
+      ctx.restore();
+    });
+  }, 250); // Pequeño retraso para asegurar que las imágenes base estén listas (si las hay)
+
 });
