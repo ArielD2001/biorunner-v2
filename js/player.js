@@ -19,7 +19,7 @@ class Player {
     // --- Física ---
     this.velX      = 0;
     this.velY      = 0;
-    this.baseSpeed = 4.5;         // velocidad horizontal base
+    this.baseSpeed = 4.0;         // velocidad horizontal base
     this.speed     = this.baseSpeed;
     this.jumpForce = -17;         // impulso de salto
     this.gravity   = 0.9;         // gravedad por frame
