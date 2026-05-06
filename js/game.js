@@ -44,8 +44,8 @@ class Game {
     // Frame global
     this.frame = 0;
 
-    // Flag para mostrar intro del cerebro solo la primera vez en Nivel 1
-    this.brainIntroShown = false;
+    // Flag para mostrar alerta educativa solo la primera vez en Nivel 1
+    this.level1AlertShown = false;
 
     // Set de IDs de células cuyo modal ya se mostró (persiste entre niveles)
     this.shownModals = new Set();
@@ -214,10 +214,6 @@ class Game {
       ctx.fillStyle = 'rgba(0,0,0,0.38)';
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
-
-    if (this.state === STATE.TRANSITION) {
-      Sprites.drawLevelCompleteEffect(ctx, this.canvas.width, this.canvas.height, this.frame);
-    }
   }
 
   // ── Pausas ────────────────────────────────────────────────────────────────
@@ -290,14 +286,14 @@ class Game {
     
     if (typeof Audio !== 'undefined') Audio.startAmbientSound();
 
-    // ── Mostrar intro del cerebro para Nivel 1 ─────────────────────────────────
-    if (idx === 0 && !this.brainIntroShown) {
-      this.brainIntroShown = true;
+    // ── Mostrar alerta educativa para Nivel 1 (solo la primera vez) ───────────
+    if (idx === 0 && !this.level1AlertShown) {
+      this.level1AlertShown = true;
       this.state = STATE.PAUSED;
-      const brainIntro = new BrainIntro(() => {
+      const level1Alert = new Level1Alert(() => {
         this.state = STATE.PLAYING;
       });
-      brainIntro.start();
+      level1Alert.show();
     }
   }
 
@@ -326,28 +322,36 @@ class Game {
   // ── Quiz ──────────────────────────────────────────────────────────────────
   _triggerQuiz() {
     if (typeof Audio !== 'undefined') Audio.stopAmbientSound();
-    this.state = STATE.PAUSED; // Similar to _pause
-    this.ui.showScreen('quiz');
+    this.state = STATE.PAUSED;
 
-    this.quiz = new Quiz(this.levelIndex, (correct, total) => {
-      // Guardar resultado
-      this.quizResults.push({ level: this.levelIndex, correct, total });
+    const currentLevelName = LEVELS_DATA[this.levelIndex].name;
 
+    // Transición unificada para todos los niveles
+    this.ui.playLevelClearAnimation(currentLevelName, () => {
       const isLastLevel = this.levelIndex >= LEVELS_DATA.length - 1;
+
       if (isLastLevel) {
-        // Juego completo → Animación épica y pantalla de victoria
-        this.ui.playEpicOutro(() => {
+        // En el último nivel, mostramos el quiz y LUEGO la victoria
+        this.ui.showScreen('quiz');
+        this.quiz = new Quiz(this.levelIndex, (correct, total) => {
+          this.quizResults.push({ level: this.levelIndex, correct, total });
           this.ui.showWin(this.playerName, this.score, this.quizResults);
           this.state = STATE.WIN;
         });
+        this.quiz.start();
+        this.state = STATE.QUIZ;
       } else {
-        // Siguiente nivel
-        this.score += correct * 500;
-        this._nextLevel();
+        // Niveles intermedios
+        this.ui.showScreen('quiz');
+        this.quiz = new Quiz(this.levelIndex, (correct, total) => {
+          this.quizResults.push({ level: this.levelIndex, correct, total });
+          this.score += correct * 500;
+          this._nextLevel();
+        });
+        this.quiz.start();
+        this.state = STATE.QUIZ;
       }
     });
-    this.quiz.start();
-    this.state = STATE.QUIZ;
   }
 
   _nextLevel() {

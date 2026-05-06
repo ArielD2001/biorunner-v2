@@ -31,6 +31,7 @@ class UI {
       gameover: document.getElementById('screen-gameover'),
       quiz:     document.getElementById('screen-quiz'),
       win:      document.getElementById('screen-win'),
+      levelClear: document.getElementById('level-clear-overlay'),
     };
 
     this._bindModal();
@@ -40,6 +41,18 @@ class UI {
   showScreen(name) {
     Object.values(this.screens).forEach(s => s.classList.remove('active'));
     if (this.screens[name]) this.screens[name].classList.add('active');
+  }
+
+  playLevelClearAnimation(levelName, callback) {
+    const elName = document.getElementById('lc-level-name');
+    if (elName) elName.textContent = levelName;
+
+    this.showScreen('levelClear');
+    
+    // Duración de la animación en CSS es ~2.2s
+    setTimeout(() => {
+      if (callback) callback();
+    }, 2500);
   }
 
   // ── HUD ───────────────────────────────────────────────────────────────────
@@ -71,7 +84,7 @@ class UI {
     this.modalDesc.textContent  = cellData.description;
     this.modalFact.textContent  = cellData.fact;
 
-    this.modalBadge.textContent = isGood ? '✅ Célula Beneficiosa' : '⚠️ Agente Patógeno';
+    this.modalBadge.textContent = isGood ? '✅  Beneficiosa' : '⚠️ Agente Patógeno';
     this.modalBadge.className   = `modal-type-badge ${isGood ? 'good' : 'bad'}`;
 
     // Color de acento por célula
@@ -159,80 +172,75 @@ class UI {
   }
 
   // ── Win ───────────────────────────────────────────────────────────────────
-  showWin(playerName, gameScore, quizCorrect, quizTotal) {
-    document.getElementById('win-name').textContent       = playerName;
-    document.getElementById('win-game-score').textContent = gameScore;
-    document.getElementById('win-quiz-score').textContent = `${quizCorrect} / ${quizTotal}`;
-    const bonus = quizCorrect * 500;
-    document.getElementById('win-total').textContent      = gameScore + bonus;
-    document.getElementById('win-emoji').textContent      =
-      quizCorrect >= quizTotal * 0.8 ? '🏆' : quizCorrect >= 0.5 ? '🎉' : '😅';
+  showWin(playerName, gameScore, quizResults) {
+    console.log("Mostrando pantalla de victoria:", { playerName, gameScore, quizResults });
+    
+    const elName = document.getElementById('win-name');
+    const elScore = document.getElementById('win-game-score');
+    const elTotal = document.getElementById('win-total');
+    
+    if (elName) elName.textContent = playerName;
+    if (elScore) elScore.textContent = String(gameScore).padStart(6, '0');
+    
+    const list = document.getElementById('win-all-quizzes');
+    let totalCorrect = 0;
+    let totalQuestions = 0;
+
+    if (list) {
+      list.innerHTML = '';
+      if (quizResults && quizResults.length > 0) {
+        quizResults.forEach(res => {
+          const row = document.createElement('div');
+          row.className = 'stat-row';
+          row.style.fontSize = '12px';
+          row.style.margin = '5px 0';
+          row.innerHTML = `<span>Quiz Nivel ${res.level + 1}:</span> <strong>${res.correct}/${res.total}</strong>`;
+          list.appendChild(row);
+          totalCorrect += res.correct;
+          totalQuestions += res.total;
+        });
+      } else {
+        list.innerHTML = '<p style="font-size:11px; opacity:0.6;">Evaluaciones completadas.</p>';
+      }
+    }
+
+    const bonus = totalCorrect * 500;
+    if (elTotal) elTotal.textContent = String(gameScore + bonus).padStart(6, '0');
+    
+    // Calcular Nota Académica (1.0 a 5.0)
+    const elGrade = document.getElementById('win-final-grade');
+    const elStatus = document.getElementById('win-grade-status');
+    const elEmoji = document.getElementById('win-emoji');
+    
+    if (elGrade && elStatus) {
+      const ratio = totalQuestions > 0 ? totalCorrect / totalQuestions : 0;
+      const finalNote = (ratio * 4) + 1; // Escala 1.0 a 5.0
+      elGrade.textContent = finalNote.toFixed(1);
+      
+      if (finalNote >= 4.8) {
+        elStatus.textContent = "¡EXCELENCIA ACADÉMICA!";
+        elStatus.style.color = "#4caf50";
+        if (elEmoji) elEmoji.textContent = "👑";
+      } else if (finalNote >= 4.0) {
+        elStatus.textContent = "¡MUY BUEN DESEMPEÑO!";
+        elStatus.style.color = "#8bc34a";
+        if (elEmoji) elEmoji.textContent = "🌟";
+      } else if (finalNote >= 3.0) {
+        elStatus.textContent = "DESEMPEÑO SATISFACTORIO";
+        elStatus.style.color = "#ffeb3b";
+        if (elEmoji) elEmoji.textContent = "🥉";
+      } else if (finalNote >= 2.0) {
+        elStatus.textContent = "NECESITA REFORZAR TEMAS";
+        elStatus.style.color = "#ff9800";
+        if (elEmoji) elEmoji.textContent = "⚠️";
+      } else {
+        elStatus.textContent = "DESEMPEÑO INSUFICIENTE";
+        elStatus.style.color = "#f44336";
+        if (elEmoji) elEmoji.textContent = "❌";
+      }
+    }
+
     this.showScreen('win');
   }
 
-  // ── CINEMÁTICA FINAL (OUTRO) ──────────────────────────────────────────────
-  playEpicOutro(onComplete) {
-    // Esconder pantalla de quiz para revelar la animación base
-    this.screens.quiz.classList.remove('active');
-    
-    const fx = document.getElementById('fx-canvas');
-    if (!fx) { onComplete(); return; }
-    
-    fx.classList.add('active');
-    fx.width = window.innerWidth;
-    fx.height = window.innerHeight;
-    const ctx = fx.getContext('2d');
-    
-    let frame = 0;
-    const duration = 220; // ~3.5 s con 60fps
-    
-    // Partículas doradas, rosas y blancas que explotan desde el centro (ADN / Neuronal burst)
-    const particles = Array.from({length: 200}, () => ({
-      x: fx.width / 2, 
-      y: fx.height / 2,
-      vx: (Math.random() - 0.5) * 35,
-      vy: (Math.random() - 0.5) * 35,
-      color: `hsl(${Math.random() * 50 + 320}, 100%, 65%)`, 
-      size: Math.random() * 6 + 3
-    }));
-
-    if (typeof Audio !== 'undefined') Audio.playPowerUp();
-
-    const loop = () => {
-      frame++;
-      
-      // Fondo negro que se desvanece de a poco
-      ctx.fillStyle = `rgba(0,0,0,${Math.min(0.04 + frame/1500, 0.35)})`;
-      ctx.fillRect(0, 0, fx.width, fx.height);
-      
-      particles.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vx *= 0.96; // Fricción radial
-        p.vy *= 0.96;
-        p.vy += 0.05; // Gravedad leve
-        
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-        ctx.fillStyle = p.color;
-        ctx.fill();
-        
-        // Conexiones de red entre partículas
-        ctx.strokeStyle = p.color + '33';
-        ctx.beginPath();
-        ctx.moveTo(fx.width/2, fx.height/2);
-        ctx.lineTo(p.x, p.y);
-        ctx.stroke();
-      });
-
-      if (frame < duration) {
-        requestAnimationFrame(loop);
-      } else {
-        fx.classList.remove('active');
-        onComplete();
-      }
-    };
-    
-    requestAnimationFrame(loop);
-  }
 }

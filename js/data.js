@@ -15,6 +15,26 @@ const CELL_TYPE = Object.freeze({ GOOD: 'good', BAD: 'bad' });
 
 const LEVEL1_GOOD = [
   {
+    id: 'musculo_involuntario',
+    name: 'Músculo Liso Involuntario',
+    type: CELL_TYPE.GOOD,
+    icon: '🧬',
+    color: '#00897b',
+    points: 80,
+    description: 'El músculo liso es un tipo de tejido muscular involuntario: actúa sin que el individuo lo controle conscientemente. Responde a distintos estímulos (nerviosos, hormonales, mecánicos y químicos) bajo el gobierno del Sistema Nervioso Autónomo (SNA), tanto la rama simpática como la parasimpática.',
+    fact: 'A diferencia del músculo estriado esquelético (voluntario) y cardíaco, el músculo liso no presenta estriaciones visibles al microscopio óptico, pues sus filamentos de actina y miosina no están organizados en sarcómeros regulares.'
+  },
+  {
+    id: 'tipos_musculo_liso',
+    name: 'Tipos de Músculo Liso',
+    type: CELL_TYPE.GOOD,
+    icon: '🔬',
+    color: '#1565c0',
+    points: 80,
+    description: 'Existen dos tipos principales de músculo liso: el Unitario (o visceral) y el Multiunitario. El unitario conecta sus células mediante uniones en hendidura (gap junctions) y se contrae como una sola unidad coordinada, como en el intestino. El multiunitario tiene cada fibra con inervación independiente, permitiendo contracciones muy finas y precisas, como en el iris del ojo o los músculos ciliares.',
+    fact: 'El músculo liso unitario es capaz de generar actividad eléctrica espontánea (marcapasos endógenos), lo que explica el peristaltismo intestinal que ocurre incluso sin estímulo nervioso externo.'
+  },
+  {
     id: 'actina',
     name: 'Filamento de Actina',
     type: CELL_TYPE.GOOD,
@@ -234,6 +254,18 @@ const BAD_CELLS  = [...LEVEL1_BAD,  ...LEVEL2_BAD,  ...LEVEL3_BAD];
 const QUIZ_BY_LEVEL = [
   // ── Nivel 1: Estructura ──────────────────────────────────────
   [
+    {
+      question: '¿Cuál es la característica principal del músculo liso respecto a su control?',
+      options: ['A) Es voluntario y está controlado por el sistema nervioso somático', 'B) Es involuntario y responde a estímulos bajo el control del sistema nervioso autónomo', 'C) Solo responde a estímulos hormonales, no nerviosos'],
+      correct: 1,
+      explanation: 'El músculo liso es involuntario: opera de forma inconsciente controlado por el SNA (ramas simpática y parasimpática). También responde a hormonas, factores locales y estiramiento mecánico.'
+    },
+    {
+      question: '¿Cuál es la diferencia entre el músculo liso unitario y el multiunitario?',
+      options: ['A) El unitario actúa de forma independiente; el multiunitario se contrae en bloque', 'B) El unitario está conectado por gap junctions y se contrae coordinadamente; el multiunitario tiene inervación individual por fibra', 'C) No existen diferencias funcionales entre ambos tipos'],
+      correct: 1,
+      explanation: 'El músculo liso unitario (visceral) usa uniones en hendidura para contraerse como una unidad (ej. intestino). El multiunitario tiene cada fibra con su propia inervación, permitiendo control fino (ej. iris del ojo).'
+    },
     {
       question: '¿Cuál es la función principal de los cuerpos densos en el músculo liso?',
       options: ['A) Síntesis de ATP para la contracción', 'B) Anclar los filamentos de actina y transmitir la tensión contráctil', 'C) Liberar Ca²⁺ al citoplasma'],
