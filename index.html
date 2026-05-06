@@ -281,77 +281,27 @@
   <!-- ══════════════════════════════════════════
        MODAL INTRO NIVEL 1 (MÚSCULO LISO)
   ═══════════════════════════════════════════ -->
-  <div id="level1-alert-overlay" class="modal-overlay hidden">
+  <div id="level-intro-modal" class="modal-overlay hidden">
     <div class="modal-box" style="width: min(680px, 96vw);">
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 15px;">
-          <span style="font-size: 32px;">🧬</span>
+          <span id="li-icon" style="font-size: 32px;">🧬</span>
           <div>
-            <h3 class="results-title" style="margin: 0; font-size: 16px;">NIVEL 1 – Estructura del Músculo Liso</h3>
-            <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin: 0;">Universidad del Sinú · Facultad de
-              Ciencias de la Salud</p>
+            <h3 id="li-title" class="results-title" style="margin: 0; font-size: 16px;">Cargando Nivel...</h3>
+            <p id="li-subtitle" style="font-size: 11px; color: rgba(255,255,255,0.5); margin: 0;">Universidad del Sinú · Facultad de Ciencias de la Salud</p>
           </div>
         </div>
       </div>
 
       <div class="modal-divider"></div>
 
-      <div class="modal-body" style="gap: 15px;">
-        <!-- Sección 1: Qué es -->
-        <div
-          style="margin-bottom: 15px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-          <div
-            style="font-size: 10px; color: #8bc34a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
-            📚 Introducción Teórica</div>
-          <p class="info-text" style="font-size: 13px; line-height: 1.5;">
-            El <strong>músculo liso</strong> es un tejido <strong>involuntario</strong> que actúa bajo el control del
-            Sistema Nervioso Autónomo. Lo encontramos en órganos huecos y vasos sanguíneos.
-          </p>
-        </div>
-
-        <!-- Sección 2: Tipos -->
-        <div style="margin-bottom: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <div
-            style="background: rgba(139, 195, 74, 0.05); padding: 12px; border-radius: 10px; border: 1px solid rgba(139, 195, 74, 0.2);">
-            <strong style="display: block; font-size: 11px; color: #8bc34a; margin-bottom: 5px;">🔬 Unitario</strong>
-            <span style="font-size: 11px; opacity: 0.8;">Células conectadas (gap junctions) que se contraen en bloque
-              (ej. intestinos).</span>
-          </div>
-          <div
-            style="background: rgba(33, 150, 243, 0.05); padding: 12px; border-radius: 10px; border: 1px solid rgba(33, 150, 243, 0.2);">
-            <strong style="display: block; font-size: 11px; color: #2196f3; margin-bottom: 5px;">🎯
-              Multiunitario</strong>
-            <span style="font-size: 11px; opacity: 0.8;">Fibras independientes para control muy preciso (ej. iris del
-              ojo).</span>
-          </div>
-        </div>
-
-        <!-- Sección 3: Peligros -->
-        <div
-          style="background: rgba(244, 67, 54, 0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(244, 67, 54, 0.2);">
-          <div
-            style="font-size: 10px; color: #f44336; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
-            ⚠️ Riesgos en este Nivel</div>
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <span style="font-size: 18px;">💥</span>
-              <span style="font-size: 11px;"><strong>Vasoespasmo:</strong> Contracción súbita del músculo liso
-                arterial.</span>
-            </div>
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <span style="font-size: 18px;">⚡</span>
-              <span style="font-size: 11px;"><strong>Broncoespasmo:</strong> Contracción por agentes como la
-                Histamina.</span>
-            </div>
-          </div>
-        </div>
+      <div id="li-body" class="modal-body" style="gap: 15px;">
+        <!-- Se llena dinámicamente -->
       </div>
 
       <div class="modal-footer" style="flex-direction: column; gap: 10px;">
-        <p style="font-size: 10px; opacity: 0.4; text-align: center;">Recolecta 🧬🔬 para aprender • Esquiva 🔴💥 para
-          sobrevivir</p>
-        <button class="btn-pixel btn-green" id="btn-level1-start" style="width: 100%; padding: 15px;">¡ENTENDIDO -
-          EMPEZAR!</button>
+        <p id="li-hint" style="font-size: 10px; opacity: 0.4; text-align: center;">Prepárate para el desafío académico.</p>
+        <button class="btn-pixel btn-green" id="btn-li-start" style="width: 100%; padding: 15px;">¡ENTENDIDO - EMPEZAR!</button>
       </div>
     </div>
   </div>

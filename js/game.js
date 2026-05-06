@@ -44,8 +44,8 @@ class Game {
     // Frame global
     this.frame = 0;
 
-    // Flag para mostrar alerta educativa solo la primera vez en Nivel 1
-    this.level1AlertShown = false;
+    // Registro de alertas de nivel mostradas (evita repetir si el jugador muere)
+    this.shownLevelAlerts = new Set();
 
     // Set de IDs de células cuyo modal ya se mostró (persiste entre niveles)
     this.shownModals = new Set();
@@ -286,14 +286,14 @@ class Game {
     
     if (typeof Audio !== 'undefined') Audio.startAmbientSound();
 
-    // ── Mostrar alerta educativa para Nivel 1 (solo la primera vez) ───────────
-    if (idx === 0 && !this.level1AlertShown) {
-      this.level1AlertShown = true;
+    // ── Alertas educativas por nivel (una vez por nivel) ─────────────────────
+    if (!this.shownLevelAlerts.has(idx)) {
+      this.shownLevelAlerts.add(idx);
       this.state = STATE.PAUSED;
-      const level1Alert = new Level1Alert(() => {
+      const introAlert = new LevelIntroAlert(idx, () => {
         this.state = STATE.PLAYING;
       });
-      level1Alert.show();
+      introAlert.show();
     }
   }
 
